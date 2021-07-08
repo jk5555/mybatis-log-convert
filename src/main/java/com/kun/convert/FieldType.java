@@ -1,7 +1,5 @@
 package com.kun.convert;
 
-import com.intellij.openapi.util.text.Strings;
-
 import java.util.HashMap;
 
 /**
