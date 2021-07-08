@@ -17,7 +17,11 @@ public class ConvertUtils {
             return false;
         }
 
-        final String tempText = text.toUpperCase(Locale.ROOT);
+        if (!text.contains("?")) {
+            return false;
+        }
+
+        final String tempText =  fixSql(text).toUpperCase(Locale.ROOT);
         boolean select = tempText.contains("SELECT") && tempText.contains("FROM");
         boolean insert = tempText.contains("INSERT INTO") && tempText.contains("VALUES");
         boolean delete = tempText.contains("DELETE") && tempText.contains("FROM");
@@ -39,6 +43,10 @@ public class ConvertUtils {
         for (String s : split) {
             s = s.trim();
             if (!(s.contains("(") && s.contains(")")) && !"null".equals(s)) {
+                return false;
+            }
+            String type = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
+            if (!FieldType.isNormalType(type)) {
                 return false;
             }
         }

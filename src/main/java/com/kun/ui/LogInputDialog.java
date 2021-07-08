@@ -41,11 +41,95 @@ public class LogInputDialog extends DialogWrapper {
             this.sqlContent.setToolTipText("这里输入完整的mybatis sql日志");
             this.sqlContent.setLineWrap(true);
 
-
             this.params = new JLabel("参数：");
             this.paramsContent = new JTextArea();
             this.paramsContent.setToolTipText("这里输入完整的mybatis 参数日志");
             this.paramsContent.setLineWrap(true);
+
+            this.sqlContent.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    String t = sqlContent.getText();
+                    if (t == null || t.length() == 0) {
+                        //鼠标一进来就读取剪切板
+                        String content = ClipboardUtils.getContent();
+                        if (ConvertUtils.isSql(content)) {
+                            String text = sqlContent.getText();
+                            if (text == null || text.length() == 0) {
+                                sqlContent.setText(content);
+                            }
+                        } else if (ConvertUtils.isParam(content)) {
+                            String text = paramsContent.getText();
+                            if (text == null || text.length() == 0) {
+                                paramsContent.setText(content);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+
+            this.paramsContent.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    String t = paramsContent.getText();
+                    if (t == null || t.length() == 0) {
+                        //鼠标一进来就读取剪切板
+                        String content = ClipboardUtils.getContent();
+                        if (ConvertUtils.isParam(content)) {
+                            String text = paramsContent.getText();
+                            if (text == null || text.length() == 0) {
+                                paramsContent.setText(content);
+                            }
+                        } else if (ConvertUtils.isSql(content)) {
+                            String text = sqlContent.getText();
+                            if (text == null || text.length() == 0) {
+                                sqlContent.setText(content);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+
 
         }
 
@@ -147,83 +231,8 @@ public class LogInputDialog extends DialogWrapper {
 
         JPanel jPanel = new JPanel();
         JBScrollPane jbScrollPane1 = new JBScrollPane(centerTable.getSqlContent());
-        jbScrollPane1.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                //鼠标一进来就读取剪切板
-                String content = ClipboardUtils.getContent();
-                if (ConvertUtils.isSql(content)) {
-                    String text = centerTable.getSqlContent().getText();
-                    if (text == null || text.length() == 0) {
-                        centerTable.getSqlContent().setText(content);
-                    }
-                } else if (ConvertUtils.isParam(content)) {
-                    String text = centerTable.getParamsContent().getText();
-                    if (text == null || text.length() == 0) {
-                        centerTable.getParamsContent().setText(content);
-                    }
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
         JBScrollPane jbScrollPane2 = new JBScrollPane(centerTable.getParamsContent());
-        jbScrollPane2.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
 
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                //鼠标一进来就读取剪切板
-                String content = ClipboardUtils.getContent();
-                if (ConvertUtils.isParam(content)) {
-                    String text = centerTable.getParamsContent().getText();
-                    if (text == null || text.length() == 0) {
-                        centerTable.getParamsContent().setText(content);
-                    }
-                } else if (ConvertUtils.isSql(content)) {
-                    String text = centerTable.getSqlContent().getText();
-                    if (text == null || text.length() == 0) {
-                        centerTable.getSqlContent().setText(content);
-                    }
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
         //定义表格
         GridLayout gridLayout = new GridLayout(2, 1, 2, 2);
         jPanel.setLayout(gridLayout);

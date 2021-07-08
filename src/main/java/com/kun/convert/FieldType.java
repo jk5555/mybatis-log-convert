@@ -1,5 +1,7 @@
 package com.kun.convert;
 
+import com.intellij.openapi.util.text.Strings;
+
 import java.util.HashMap;
 
 /**
@@ -41,6 +43,6 @@ public class FieldType {
     }
 
     public static String getDefaultValue(String key) {
-        return MAP.get(key);
+        return MAP.get(key) == null ? MAP.get("String") : MAP.get(key);
     }
 }
