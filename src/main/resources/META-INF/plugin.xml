@@ -1,0 +1,36 @@
+<idea-plugin>
+    <id>com.kun.mybatis log convert</id>
+    <name>Mybatis Log Convert</name>
+    <vendor email="kun1.0@qq.com" url="https://github.com/jk5555/mybatis-log-convert">Kun</vendor>
+
+    <description><![CDATA[
+    <p>Mainly used in the production environment to view the mybatis log, to integrate the sql and parameters of the mybatis log into a sql statement that can be executed.</p>
+    <p>Operation method: Click the plug-in icon "small eyes" on the toolbar, and follow the prompts in the pop-up window to operate the conversion.</p>
+    <p>主要用于生产环境查看mybatis日志时，将mybatis日志的sql和参数整合成一段可以执行的sql语句。</p>
+    <p>操作方法：点击工具条上的”小眼睛“插件图标，在弹窗里按提示操作转换</p><br>
+   <em><a href="https://github.com/jk5555/json-format-for-entity">插件github主页</a></em>
+    ]]></description>
+
+    <change-notes>
+        version 1.0  First version. &lt;br&gt;
+    </change-notes>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <idea-version since-build="173.2099.1"/>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="mybatislogdialogAction" class="com.kun.ui.MybatisLogDialogAction" text="mybatis日志输入弹窗"
+                description="用于输入mybatis的sql日志" icon="AllIcons.General.InspectionsEye">
+            <add-to-group group-id="MainToolBar" anchor="last" />
+            <add-to-group group-id="NavBarToolBar" anchor="last" />
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl M"/>
+        </action>
+    </actions>
+</idea-plugin>
