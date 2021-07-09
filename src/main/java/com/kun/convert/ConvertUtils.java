@@ -11,8 +11,7 @@ import java.util.Locale;
 public class ConvertUtils {
 
 
-
-    public static boolean isSql(String text){
+    public static boolean isSql(String text) {
         if (text == null || text.length() <= 0) {
             return false;
         }
@@ -21,7 +20,7 @@ public class ConvertUtils {
             return false;
         }
 
-        final String tempText =  fixSql(text).toUpperCase(Locale.ROOT);
+        final String tempText = fixSql(text).toUpperCase(Locale.ROOT);
         boolean select = tempText.contains("SELECT") && tempText.contains("FROM");
         boolean insert = tempText.contains("INSERT INTO") && tempText.contains("VALUES");
         boolean delete = tempText.contains("DELETE") && tempText.contains("FROM");
@@ -32,7 +31,7 @@ public class ConvertUtils {
     }
 
 
-    public static boolean isParam(String text){
+    public static boolean isParam(String text) {
         if (text == null || text.length() <= 0) {
             return false;
         }
@@ -42,12 +41,14 @@ public class ConvertUtils {
         String[] split = tempText.split(",");
         for (String s : split) {
             s = s.trim();
-            if (!(s.contains("(") && s.contains(")")) && !"null".equals(s)) {
-                return false;
-            }
-            String type = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
-            if (!FieldType.isNormalType(type)) {
-                return false;
+            if (!"null".equals(s)) {
+                if (!(s.contains("(") && s.contains(")"))) {
+                    return false;
+                }
+                String type = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
+                if (!FieldType.isNormalType(type)) {
+                    return false;
+                }
             }
         }
 
@@ -76,16 +77,16 @@ public class ConvertUtils {
     }
 
 
-    public static String convert(String sql, String params){
+    public static String convert(String sql, String params) {
         if (!isSql(sql) || !isParam(params)) {
             return null;
         }
 
+        sql = fixSql(sql);
         if (!sql.contains("?")) {
-            return sql;
+            return null;
         }
 
-        sql = fixSql(sql);
         String[] split = fixParam(params).split(",");
         for (String s : split) {
             String trim = s.trim();
@@ -93,24 +94,41 @@ public class ConvertUtils {
                 int index = sql.indexOf("?");
                 int end = index;
                 char c;
-                boolean isNullFalg = false;
-                while (true){
+                int isNullFalg = 0;
+                while (true) {
                     index--;
                     c = sql.charAt(index);
                     if (c != ' ') {
                         if (c == '=') {
-                            isNullFalg = true;
+                            char preChar = sql.charAt(index - 1);
+                            if (preChar == '!') {
+                                // is not null
+                                isNullFalg = 1;
+                                index--;
+                            } else if (preChar == ':' || preChar == '<' || preChar == '>') {
+                                // 正常赋值
+                                isNullFalg = 0;
+                            } else {
+                                // is null
+                                isNullFalg = 2;
+                            }
                         }
                         break;
                     }
                 }
-                if (isNullFalg) {
-                    // 这个?不转义，还识别不了，这个有点坑
-                    String sub = sql.substring(index, end) + "\\?";
-                    sql = sql.replaceFirst(sub, " is null ");
-                } else {
-                    sql = sql.replaceFirst("\\?", trim);
+                switch (isNullFalg) {
+                    case 1:
+                        // 这个?不转义，这方法还识别不了，这个有点坑
+                        sql = sql.replaceFirst((sql.substring(index, end) + "\\?"), " is not null ");
+                        break;
+                    case 2:
+                        sql = sql.replaceFirst((sql.substring(index, end) + "\\?"), " is null ");
+                        break;
+                    case 0:
+                    default:
+                        sql = sql.replaceFirst("\\?", trim);
                 }
+
             } else {
                 String param = trim.substring(0, trim.indexOf("("));
                 String type = trim.substring(trim.indexOf("(") + 1, trim.indexOf(")"));
@@ -136,8 +154,6 @@ public class ConvertUtils {
         String convert = convert(sql, params);
         System.out.println("convert = " + convert);
     }
-
-
 
 
 }
