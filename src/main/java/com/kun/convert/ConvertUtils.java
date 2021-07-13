@@ -16,6 +16,10 @@ public class ConvertUtils {
             return false;
         }
 
+        if (strNum(text, ": ") > 1) {
+            return false;
+        }
+
         if (!text.contains("?")) {
             return false;
         }
@@ -33,6 +37,10 @@ public class ConvertUtils {
 
     public static boolean isParam(String text) {
         if (text == null || text.length() <= 0) {
+            return false;
+        }
+
+        if (strNum(text, ": ") > 1) {
             return false;
         }
 
@@ -56,8 +64,18 @@ public class ConvertUtils {
 
     }
 
+    public static int strNum(String text, String checkFlag) {
+        String var = text;
+        int res = 0;
+        while (var.contains(checkFlag)) {
+            var = var.substring(var.indexOf(checkFlag) + checkFlag.length()).trim();
+            res++;
+        }
+        return res;
+    }
+
     @NotNull
-    private static String fixSql(String text) {
+    public static String fixSql(String text) {
         String paramFlag = ": ";
         if (text.contains(paramFlag)) {
             return text.substring(text.lastIndexOf(paramFlag) + 2).trim();
@@ -67,7 +85,7 @@ public class ConvertUtils {
     }
 
     @NotNull
-    private static String fixParam(String text) {
+    public static String fixParam(String text) {
         String paramFlag = ": ";
         if (text.contains(paramFlag)) {
             return text.substring(text.lastIndexOf(paramFlag) + 2).trim();

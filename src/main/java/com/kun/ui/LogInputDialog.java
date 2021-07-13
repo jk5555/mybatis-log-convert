@@ -1,6 +1,5 @@
 package com.kun.ui;
 
-import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -11,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -22,26 +19,19 @@ import java.awt.event.MouseListener;
 public class LogInputDialog extends DialogWrapper {
 
     private final Project project;
-
-    NotificationGroup notificationGroup = new NotificationGroup("ConvertLog.NotificationGroup", NotificationDisplayType.BALLOON, true);
-
     private CenterTable centerTable;
 
 
     private static class CenterTable {
-        private JLabel sql;
         private JTextArea sqlContent;
 
-        private JLabel params;
         private JTextArea paramsContent;
 
         public CenterTable() {
-            this.sql = new JLabel("sql：");
             this.sqlContent = new JTextArea();
             this.sqlContent.setToolTipText("这里输入完整的mybatis sql日志");
             this.sqlContent.setLineWrap(true);
 
-            this.params = new JLabel("参数：");
             this.paramsContent = new JTextArea();
             this.paramsContent.setToolTipText("这里输入完整的mybatis 参数日志");
             this.paramsContent.setLineWrap(true);
@@ -71,12 +61,12 @@ public class LogInputDialog extends DialogWrapper {
                         if (ConvertUtils.isSql(content)) {
                             String text = sqlContent.getText();
                             if (text == null || text.length() == 0) {
-                                sqlContent.setText(content);
+                                sqlContent.setText(ConvertUtils.fixSql(content));
                             }
                         } else if (ConvertUtils.isParam(content)) {
                             String text = paramsContent.getText();
                             if (text == null || text.length() == 0) {
-                                paramsContent.setText(content);
+                                paramsContent.setText(ConvertUtils.fixParam(content));
                             }
                         }
                     }
@@ -113,12 +103,12 @@ public class LogInputDialog extends DialogWrapper {
                         if (ConvertUtils.isParam(content)) {
                             String text = paramsContent.getText();
                             if (text == null || text.length() == 0) {
-                                paramsContent.setText(content);
+                                paramsContent.setText(ConvertUtils.fixParam(content));
                             }
                         } else if (ConvertUtils.isSql(content)) {
                             String text = sqlContent.getText();
                             if (text == null || text.length() == 0) {
-                                sqlContent.setText(content);
+                                sqlContent.setText(ConvertUtils.fixSql(content));
                             }
                         }
                     }
@@ -133,29 +123,12 @@ public class LogInputDialog extends DialogWrapper {
 
         }
 
-
-        public JLabel getSql() {
-            return sql;
-        }
-
-        public void setSql(JLabel sql) {
-            this.sql = sql;
-        }
-
         public JTextArea getSqlContent() {
             return sqlContent;
         }
 
         public void setSqlContent(JTextArea sqlContent) {
             this.sqlContent = sqlContent;
-        }
-
-        public JLabel getParams() {
-            return params;
-        }
-
-        public void setParams(JLabel params) {
-            this.params = params;
         }
 
         public JTextArea getParamsContent() {
@@ -282,14 +255,11 @@ public class LogInputDialog extends DialogWrapper {
             return;
         }
 
-        StringSelection selection = new StringSelection(text);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, null);
+        ClipboardUtils.setContent(text);
         this.close(0);
 
         String message = "转换成功！已将结果复制到剪切板，直接粘贴即可";
-        Notification success = notificationGroup.createNotification(message, NotificationType.INFORMATION);
-        Notifications.Bus.notify(success, project);
+        NotificationUtils.showMessage(project, message);
 
     }
 

@@ -3,6 +3,7 @@ package com.kun.convert;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 
 /**
@@ -29,5 +30,11 @@ public class ClipboardUtils {
 
         return null;
 
+    }
+
+    public static void setContent(String text){
+        StringSelection selection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, null);
     }
 }

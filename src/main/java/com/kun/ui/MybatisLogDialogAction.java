@@ -4,6 +4,9 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 
+/**
+ * @author kun
+ */
 public class MybatisLogDialogAction extends AnAction {
 
     @Override
