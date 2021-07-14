@@ -5,14 +5,22 @@
 
     <description><![CDATA[
     <p>Mainly used in the production environment to view the mybatis log, to integrate the sql and parameters of the mybatis log into a sql statement that can be executed.</p>
-    <p>Operation method: Click the plug-in icon "small eyes" on the toolbar(Or use the shortcut key [alt + P]), and follow the prompts in the pop-up window to operate the conversion.</p>
-    <p>主要用于生产环境查看mybatis日志时，将mybatis日志的sql和参数整合成一段可以执行的sql语句。</p>
-    <p>操作方法：点击工具条上的”小眼睛“插件图标（或者用快捷键 [alt + P]），在弹窗里按提示操作转换</p><br>
+    <p>Operation method: [sql copied from the outside world] Click the "small eye" plug-in icon on the toolbar (or use the shortcut key [alt + P]), and follow the prompts in the pop-up window to operate the conversion. <br>
+                [Sql log output from console] Drag the cursor to select the SQL and parameter log to be converted -> right mouse button -> mybatis log analysis</p>
+    <p>将mybatis日志的sql和参数整合成一段可以执行的sql语句。支持解析外界复制过来的sql，也支持解析idea控制台输出的sql日志。</p>
+    <p>操作方法：[外界复制过来的sql] 点击工具条上的”小眼睛“插件图标（或者用快捷键 [alt + P]），在弹窗里按提示操作转换。<br>
+                [控制台输出的sql日志] 光标拖选待转换的sql和参数日志 -> 鼠标右键 -> mybatis日志解析
+    </p><br>
    <em><a href="https://github.com/jk5555/mybatis-log-convert">插件github主页</a></em>
     ]]></description>
 
     <change-notes>
-        version 1.0  First version. &lt;br&gt;
+        <![CDATA[
+            <ul>
+                <li>2.0：增加对idea控制台中mybatis日志转换支持。操作方法：光标拖选待转换的sql和参数日志 -> 鼠标右键 -> mybatis日志解析 <li>
+                <li>1.0：支持在表单中转换sql（主要用于排查生产问题时查看sql日志）<li>
+            </ul>
+    ]]>
     </change-notes>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
@@ -32,8 +40,8 @@
             <add-to-group group-id="NavBarToolBar" anchor="last" />
             <keyboard-shortcut keymap="$default" first-keystroke="alt P"/>
         </action>
-        <action id="MybatisLogTrans" class="com.kun.ui.MybatisLogTransAction" text="mybatis日志翻译"
-                description="mybatis日志翻译" icon="AllIcons.General.InspectionsEye">
+        <action id="MybatisLogTrans" class="com.kun.ui.MybatisLogTransAction" text="mybatis日志解析"
+                description="mybatis日志解析" icon="AllIcons.General.InspectionsEye">
             <add-to-group group-id="ConsoleEditorPopupMenu" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt L"/>
         </action>

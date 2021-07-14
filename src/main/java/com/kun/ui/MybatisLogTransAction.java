@@ -36,7 +36,7 @@ public class MybatisLogTransAction extends AnAction {
             return;
         }
 
-        int strNum = ConvertUtils.strNum(selectedText, ": ");
+        int strNum = ConvertUtils.strNum(selectedText, SQL_START_STR) + ConvertUtils.strNum(selectedText, PARAMS_START_STR);
         if (strNum != 2) {
             String message;
             if (strNum < 2) {
