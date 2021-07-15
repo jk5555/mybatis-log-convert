@@ -17,6 +17,10 @@
     <change-notes>
         <![CDATA[
             <ul>
+                <li>2.0：Added support for mybatis log conversion in the idea console. Operation method: drag the cursor to select the SQL and parameter log to be converted -> right mouse button -> mybatis log analysis <li>
+                <li>1.0：Support to convert SQL in the form (mainly used to check the SQL log when troubleshooting production problems)<li>
+            </ul>
+            <ul>
                 <li>2.0：增加对idea控制台中mybatis日志转换支持。操作方法：光标拖选待转换的sql和参数日志 -> 鼠标右键 -> mybatis日志解析 <li>
                 <li>1.0：支持在表单中转换sql（主要用于排查生产问题时查看sql日志）<li>
             </ul>
