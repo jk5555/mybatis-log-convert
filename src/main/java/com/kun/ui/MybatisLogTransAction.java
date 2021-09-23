@@ -61,6 +61,7 @@ public class MybatisLogTransAction extends AnAction {
             String convert = ConvertUtils.convert(sql, params);
             if (convert == null || convert.length() == 0) {
                 NotificationUtils.showMessage(project, "转换失败，请检查参数是否正确");
+                return;
             }
             ClipboardUtils.setContent(convert);
             NotificationUtils.showMessage(project, "转换成功！已将结果复制到剪切板，直接粘贴即可");
