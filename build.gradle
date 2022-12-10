@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.kun'
-version '2.0.0'
+version '2.1.0'
 
 repositories {
     mavenCentral()
@@ -15,10 +15,24 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+
+
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2021.1'
+    version = '2021.3.2'
+    type = 'IU'
+
 }
+//intellij {
+//    version.set("2022.1.4")
+//    type.set("IC") // Target IDE Platform
+//
+//    plugins.set(listOf(/* Plugin Dependencies */))
+//}
 /*patchPluginXml {
     changeNotes = """
       version 1.0  First version."""
